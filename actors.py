@@ -12,7 +12,7 @@ class Player(pg.sprite.Sprite):
     """
     This class represents our user controlled character.
     """
-    def __init__(self, pos, image, speed=100, *groups):  # initialize player
+    def __init__(self, pos, image, speed=500, *groups):  # initialize player
         super(Player, self).__init__(*groups)
         self.top_speed = speed  # set top speed
         self.acceleration = speed / 8  # set max acceleration

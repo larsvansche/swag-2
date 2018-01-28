@@ -23,7 +23,8 @@ class App(object):
         # ship = random.choice(list(prepare.GFX["ships"].values()))
         ship = list(prepare.GFX["ships"].values())[0]  # pick first ship available
         self.player = actors.Player((0,0), ship)
-        self.level = level.Level(self.screen_rect.copy(), self.player)
+        self.enemy = actors.Enemy((0, 0), ship)
+        self.level = level.Level(self.screen_rect.copy(), self.player, self.enemy)
 
     def event_loop(self):
         """

@@ -18,12 +18,17 @@ class Level(object):
     three star layers.  The player is drawn and updated by this class.
     The player is contained in a pg.sprite.GroupSingle group.
     """
-    def __init__(self, viewport, player):
+    def __init__(self, viewport, player, enemy):
         self.image = BIG_STARS.copy()
         self.rect = self.image.get_rect()
+
         player.rect.midbottom = self.rect.centerx, self.rect.bottom-50
         player.true_pos = list(player.rect.center)
         self.player_singleton = pg.sprite.GroupSingle(player)
+
+        enemy.rect.midbottom = self.rect.centerx, self.rect.bottom-50
+        enemy.true_pos = list(enemy.rect.center)
+        self.enemy_singleton = pg.sprite.GroupSingle(enemy)
         self.make_layers()
         self.viewport = viewport
         self.update_viewport(True)
@@ -77,6 +82,8 @@ class Level(object):
         """
         self.player_singleton.clear(self.image, clear_callback)
         self.player_singleton.draw(self.image)
+        self.enemy_singleton.clear(self.image, clear_callback)
+        self.enemy_singleton.draw(self.image)
         surface.blit(self.base, (0,0), self.base_viewport)
         surface.blit(self.mid_image, (0,0), self.mid_viewport)
         surface.blit(self.image, (0,0), self.viewport)
