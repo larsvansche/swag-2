@@ -29,6 +29,10 @@ class Player(pg.sprite.Sprite):
         """
         Updates the players position based on currently held keys.
         """
+        if self.thrust_strength > 0:
+            image = list(prepare.GFX["ships"].values())[7]
+            self.image = image
+
         self.check_keys(keys, dt)  # run function check_keys that checks if keys are pressed
         self.true_pos[0] += self.velocity[0] * dt  # update x-position by horizontal velocity * delta time variable
         self.true_pos[1] += self.velocity[1] * dt  # update y-position by vertical velocity * delta time variable
