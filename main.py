@@ -22,7 +22,7 @@ class App(object):
         self.done = False
         # ship = random.choice(list(prepare.GFX["ships"].values()))
         ship = list(prepare.GFX["ships"].values())[0]  # pick first ship available
-        self.player = actors.Player((0,0), ship)
+        self.player = actors.Player((0, 0), ship)
         self.enemy = actors.Enemy((0, 0), ship)
         self.level = level.Level(self.screen_rect.copy(), self.player, self.enemy)
 
@@ -62,7 +62,7 @@ class App(object):
         """
         The main game loop.
         """
-        dt = 0
+        dt = 0.3
         self.clock.tick(self.fps)
         while not self.done:
             self.event_loop()
