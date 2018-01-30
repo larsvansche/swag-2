@@ -21,8 +21,8 @@ class App(object):
         self.keys = pg.key.get_pressed()
         self.done = False
         # ship = random.choice(list(prepare.GFX["ships"].values()))
-        ship = list(prepare.GFX["ships"].values())[0]  # pick first ship available
-        self.player = actors.Player((0, 0), ship, self.screen)
+        ship = list(prepare.GFX["ships"].values())[7]  # pick first ship available
+        self.player = actors.Player((0, 0), ship)
         self.enemy = actors.Enemy((0, 0), ship)
         self.level = level.Level(self.screen_rect.copy(), self.player, self.enemy)
         self.energyloss_counter = 0
@@ -33,7 +33,7 @@ class App(object):
         if self.player.health >= 75:
             health_color = (0, 128, 0) # Health above or equal to 75 = green
         elif self.player.health > 25:
-            health_color = (255,255,0) # Health above 25 = yellow
+            health_color = (255, 255, 0) # Health above 25 = yellow
         else:
             health_color = (255, 0, 0) # Health beneath 25 = red
 
@@ -42,12 +42,12 @@ class App(object):
     # Creates energy bar for player
     def energy_bar(self):
         if self.player.energy >= 75:
-            energy_color = (0,0,255) # Energy above or equal to 50 = blue
+            energy_color = (0, 0, 255) # Energy above or equal to 50 = blue
         elif self.player.energy > 25:
-            energy_color = (30,144,255) # Energy above than 25 = dodgerblue1
+            energy_color = (30, 144, 255) # Energy above than 25 = dodgerblue1
         else:
-            energy_color = (0,238,238) # Energy beneath 25 = cyan2
-        pg.draw.rect(self.screen, energy_color, (10, 40 , self.player.energy, 10))
+            energy_color = (0, 238, 238) # Energy beneath 25 = cyan2
+        pg.draw.rect(self.screen, energy_color, (10, 40, self.player.energy, 10))
 
     def event_loop(self):
         """

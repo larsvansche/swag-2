@@ -12,7 +12,7 @@ class Player(pg.sprite.Sprite):
     """
     This class represents our user controlled character.
     """
-    def __init__(self, pos, image, speed= 100, *groups):  # instantiate player
+    def __init__(self, pos, image, speed=100, *groups):  # instantiate player
         super(Player, self).__init__(*groups)
         self.top_speed = speed  # set top speed
         self.acceleration = 12  # set max acceleration
@@ -26,12 +26,12 @@ class Player(pg.sprite.Sprite):
         self.thrust_strength = 0
         self.health = 100
         self.energy = 100
+        self.bullets =
 
     def update(self, keys, bounding, dt):
         """
         Updates the players position based on currently held keys.
         """
-
         self.check_keys(keys, dt)  # run function check_keys that checks if keys are pressed
         self.true_pos[0] += self.velocity[0] * dt  # update x-position by horizontal velocity * delta time variable
         self.true_pos[1] += self.velocity[1] * dt  # update y-position by vertical velocity * delta time variable
@@ -58,6 +58,7 @@ class Player(pg.sprite.Sprite):
         """
         self.rotate(keys, dt)
         self.thrust(keys, dt)
+        self.shoot(keys, dt)
         self.boost(keys, dt)
 
     def boost(self, keys, dt):
@@ -71,12 +72,9 @@ class Player(pg.sprite.Sprite):
     # def energy_use(self, keys):
     #     if keys[prepare.BOOST]:
     #        # if not
-
-
     def recharge_energy(self):
         if self.energy < 100:
             self.energy += 3 / 60
-
 
     def rotate(self, keys, dt):
         """
@@ -118,6 +116,10 @@ class Player(pg.sprite.Sprite):
             angle = math.atan2(op, adj)  # Angle of movement; not ship direction
             self.velocity[0] = self.top_speed*math.cos(angle)
             self.velocity[1] = self.top_speed*math.sin(angle)
+
+    def shoot(self, keys, dt):
+        if keys[prepare.FIRE]:
+            bullet = Bullet(self.rect.centerx, self.rect.top)
 
     def draw(self, surface):
         """
@@ -216,4 +218,20 @@ class Enemy(pg.sprite.Sprite):
         Basic draw function. (not used if drawing via groups)
         """
         surface.blit(self.image, self.rect)
+
+
+class Bullet(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.image = pg.Surface((10, 20))
+        self.image.fill((138, 43, 226))
+        self.rect = self.image.get_rect()
+        self.rect.bottom = y
+        self.rect.centerx = x
+        self.speedy = -10
+
+    def update(self):
+        print(self.rect.x, self.rect.y)
+        self.rect.y = self.speedy
+
 

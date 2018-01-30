@@ -30,6 +30,8 @@ class Level(object):
         enemy.true_pos = list(enemy.rect.center)
         self.enemy_singleton = pg.sprite.GroupSingle(enemy)
 
+        self.bullets = pg.sprite.Group()
+
         self.entities = [self.player_singleton, self.enemy_singleton]  # add entities to levels entities
 
         self.make_layers()
