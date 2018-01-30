@@ -11,7 +11,7 @@ import tools
 CAPTION = "Space"
 SCREEN_WIDTH, SCREEN_HEIGHT = SCREEN_SIZE = (700, 500)
 BACKGROUND_COLOR = (10, 20, 30)
-SCALE_FACTOR = 0.1  # For scaling down ship images.
+SCALE_FACTOR = 0.3  # For scaling down ship images.
 
 
 ROTATE = {pg.K_RIGHT: 1, pg.K_LEFT: -1}
