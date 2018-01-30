@@ -22,7 +22,7 @@ class App(object):
         self.done = False
         # ship = random.choice(list(prepare.GFX["ships"].values()))
         ship = list(prepare.GFX["ships"].values())[0]  # pick first ship available
-        self.player = actors.Player((0, 0), ship)
+        self.player = actors.Player((0, 0), ship, self.screen)
         self.enemy = actors.Enemy((0, 0), ship)
         self.level = level.Level(self.screen_rect.copy(), self.player, self.enemy)
 
@@ -55,14 +55,14 @@ class App(object):
         Draw all elements.  Individual actor drawing handled by level instance.
         """
         self.screen.fill(prepare.BACKGROUND_COLOR)
-        self.level.draw(self.screen)
+        self.level.draw(self.screen, self.player.bullets)
         pg.display.update()
 
     def main_loop(self):
         """
         The main game loop.
         """
-        dt = 0
+        dt = 0.3
         self.clock.tick(self.fps)
         while not self.done:
             self.event_loop()

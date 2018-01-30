@@ -9,7 +9,7 @@ import prepare
 import tools
 
 
-BIG_STARS = tools.tile_surface((2048,2048), prepare.GFX["stars"], True)
+BIG_STARS = tools.tile_surface((2048, 2048), prepare.GFX["stars"], True)
 
 
 class Level(object):
@@ -22,13 +22,16 @@ class Level(object):
         self.image = BIG_STARS.copy()
         self.rect = self.image.get_rect()
 
-        player.rect.midbottom = self.rect.centerx, self.rect.bottom-50
+        player.rect.midbottom = self.rect.centerx, self.rect.bottom - 50  # set position of the player
         player.true_pos = list(player.rect.center)
         self.player_singleton = pg.sprite.GroupSingle(player)
 
-        enemy.rect.midbottom = self.rect.centerx, self.rect.bottom-50
+        enemy.rect.midbottom = self.rect.centerx, self.rect.bottom - 100
         enemy.true_pos = list(enemy.rect.center)
         self.enemy_singleton = pg.sprite.GroupSingle(enemy)
+
+        self.entities = [self.player_singleton, self.enemy_singleton]  # add entities to levels entities
+
         self.make_layers()
         self.viewport = viewport
         self.update_viewport(True)
@@ -54,7 +57,12 @@ class Level(object):
         Updates the player and then adjusts the viewport with respect to the
         player's new position.
         """
-        self.player_singleton.update(keys, self.rect, dt)
+        # self.player_singleton.update(keys, self.rect, dt)
+        # self.enemy_singleton.update(keys, self.rect, dt)
+
+        for entity in self.entities:  # for loop that updates all instantiated entities
+            entity.update(keys, self.rect, dt)
+
         self.update_viewport()
 
     def update_viewport(self, start=False):
@@ -75,7 +83,7 @@ class Level(object):
             self.base_true[1] += change[1]*0.1
             self.base_viewport.topleft = self.base_true
 
-    def draw(self, surface):
+    def draw(self, surface, bullets=False):
         """
         Blit and clear actors on the self.image layer.
         Then blit appropriate viewports of all layers.
@@ -84,9 +92,12 @@ class Level(object):
         self.player_singleton.draw(self.image)
         self.enemy_singleton.clear(self.image, clear_callback)
         self.enemy_singleton.draw(self.image)
-        surface.blit(self.base, (0,0), self.base_viewport)
-        surface.blit(self.mid_image, (0,0), self.mid_viewport)
-        surface.blit(self.image, (0,0), self.viewport)
+        if bullets:
+            for bullet in bullets:
+                bullet.draw(surface, self.base_viewport)
+        surface.blit(self.base, (0, 0), self.base_viewport)
+        surface.blit(self.mid_image, (0, 0), self.mid_viewport)
+        surface.blit(self.image, (0, 0), self.viewport)
 
 
 def clear_callback(surface, rect):
@@ -94,5 +105,6 @@ def clear_callback(surface, rect):
     We need this callback because the clearing background contains
     transparency.  We need to fill the rect with transparency first.
     """
-    surface.fill((0,0,0,0), rect)
+    surface.fill((0, 0, 0, 0), rect)
     surface.blit(BIG_STARS, rect, rect)
+
