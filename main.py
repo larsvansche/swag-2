@@ -25,6 +25,29 @@ class App(object):
         self.player = actors.Player((0, 0), ship, self.screen)
         self.enemy = actors.Enemy((0, 0), ship)
         self.level = level.Level(self.screen_rect.copy(), self.player, self.enemy)
+        self.energyloss_counter = 0
+        self.energygain_counter = 0
+
+    # Creates health bar for player
+    def health_bar(self):
+        if self.player.health >= 75:
+            health_color = (0, 128, 0) # Health above or equal to 75 = green
+        elif self.player.health > 25:
+            health_color = (255,255,0) # Health above 25 = yellow
+        else:
+            health_color = (255, 0, 0) # Health beneath 25 = red
+
+        pg.draw.rect(self.screen, health_color, (10, 20 , self.player.health, 15))  # Shape and location of health bar
+
+    # Creates energy bar for player
+    def energy_bar(self):
+        if self.player.energy >= 75:
+            energy_color = (0,0,255) # Energy above or equal to 50 = blue
+        elif self.player.energy > 25:
+            energy_color = (30,144,255) # Energy above than 25 = dodgerblue1
+        else:
+            energy_color = (0,238,238) # Energy beneath 25 = cyan2
+        pg.draw.rect(self.screen, energy_color, (10, 40 , self.player.energy, 10))
 
     def event_loop(self):
         """
@@ -55,7 +78,10 @@ class App(object):
         Draw all elements.  Individual actor drawing handled by level instance.
         """
         self.screen.fill(prepare.BACKGROUND_COLOR)
-        self.level.draw(self.screen, self.player.bullets)
+        self.level.draw(self.screen)
+        self.health_bar()
+        self.energy_bar()
+        self.level.draw(self.screen)
         pg.display.update()
 
     def main_loop(self):
@@ -70,6 +96,8 @@ class App(object):
             self.render()
             dt = self.clock.tick(self.fps)/1000.0  # create delta time variable to multiply with movement and rotation
             self.display_fps()
+            self.health_bar()
+            self.energy_bar()
 
 
 def main():

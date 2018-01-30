@@ -17,8 +17,8 @@ SCALE_FACTOR = 0.4  # For scaling down ship images.
 ROTATE = {pg.K_RIGHT: 1, pg.K_LEFT: -1}
 ACCELERATE = pg.K_UP
 DECELERATE = pg.K_DOWN
-FIRE = pg.K_SPACE
-
+FIRE = pg.K_LSHIFT
+BOOST = pg.K_SPACE
 
 # Set up environment.
 os.environ['SDL_VIDEO_CENTERED'] = '1'

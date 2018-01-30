@@ -83,7 +83,7 @@ class Level(object):
             self.base_true[1] += change[1]*0.1
             self.base_viewport.topleft = self.base_true
 
-    def draw(self, surface, bullets=False):
+    def draw(self, surface):
         """
         Blit and clear actors on the self.image layer.
         Then blit appropriate viewports of all layers.
@@ -92,9 +92,6 @@ class Level(object):
         self.player_singleton.draw(self.image)
         self.enemy_singleton.clear(self.image, clear_callback)
         self.enemy_singleton.draw(self.image)
-        if bullets:
-            for bullet in bullets:
-                bullet.draw(surface, self.base_viewport)
         surface.blit(self.base, (0, 0), self.base_viewport)
         surface.blit(self.mid_image, (0, 0), self.mid_viewport)
         surface.blit(self.image, (0, 0), self.viewport)
