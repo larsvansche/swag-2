@@ -11,13 +11,13 @@ import tools
 CAPTION = "Space"
 SCREEN_WIDTH, SCREEN_HEIGHT = SCREEN_SIZE = (700, 500)
 BACKGROUND_COLOR = (10, 20, 30)
-SCALE_FACTOR = 0.1  # For scaling down ship images.
+SCALE_FACTOR = 0.4  # For scaling down ship images.
 
 
 ROTATE = {pg.K_RIGHT: 1, pg.K_LEFT: -1}
 ACCELERATE = pg.K_UP
 DECELERATE = pg.K_DOWN
-
+BOOST = pg.K_SPACE
 
 # Set up environment.
 os.environ['SDL_VIDEO_CENTERED'] = '1'
