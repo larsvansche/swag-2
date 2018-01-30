@@ -40,7 +40,7 @@ class Level(object):
         self.mid_true = list(self.mid_viewport.topleft)
         self.base_viewport = self.viewport.copy()
         self.base_true = list(self.base_viewport.topleft)
-        self.level = 1
+        self.level = 10
 
         self.makewave()
 
@@ -87,7 +87,12 @@ class Level(object):
 
             self.entities[entity].update(keys, self.rect, dt, self.entities)
 
+        self.detectcollision()
+
         self.update_viewport()
+
+    def detectcollision(self):
+        print(self.entities)
 
     def update_viewport(self, start=False):
         """

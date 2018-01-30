@@ -27,6 +27,7 @@ class Player(pg.sprite.Sprite):
         self.thrust_strength = 0
         self.health = 100
         self.energy = 100
+        self.colissionsize = 10  # radius for
 
     def update(self, keys, bounding, dt, entities):
         """
@@ -66,7 +67,7 @@ class Player(pg.sprite.Sprite):
         if keys[prepare.BOOST] and self.energy > 0:
             self.top_speed = 350
             self.acceleration = 20
-            self.energy -= 20 / 60
+            self.energy -= 60 / 60
         else:
             self.top_speed = 100
 
