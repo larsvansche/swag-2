@@ -9,8 +9,8 @@ import prepare
 import tools
 import actors
 
-level_width = 700
-level_height = 500
+level_width = 2048
+level_height = 2048
 
 BIG_STARS = tools.tile_surface((level_width, level_height), prepare.GFX["stars"], True)
 
@@ -25,20 +25,13 @@ class Level(object):
 
         self.image = BIG_STARS.copy()
         self.rect = self.image.get_rect()
+
         self.entities = {"player": player}
         self.entities["player"].rect.midbottom = self.rect.centerx, self.rect.bottom - 50  # set position of the player
         self.entities["player"].true_pos = list(player.rect.center)
         self.groupsingles = {"player": pg.sprite.GroupSingle(self.entities["player"])}
 
-        # player.rect.midbottom = self.rect.centerx, self.rect.bottom - 50  # set position of the player
-        # player.true_pos = list(player.rect.center)
-        # self.player_singleton = pg.sprite.GroupSingle(player)
-        #
-        # enemy.rect.midbottom = self.rect.centerx, self.rect.bottom - 100
-        # enemy.true_pos = list(enemy.rect.center)
-        # self.enemy_singleton = pg.sprite.GroupSingle(enemy)
-        #
-        # self.entities = [self.player_singleton, self.enemy_singleton]  # add entities to levels entities
+        self.bullets = pg.sprite.Group()
 
         self.make_layers()
         self.viewport = viewport
@@ -140,3 +133,4 @@ def clear_callback(surface, rect):
     """
     surface.fill((0, 0, 0, 0), rect)
     surface.blit(BIG_STARS, rect, rect)
+

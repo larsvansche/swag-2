@@ -17,7 +17,8 @@ SCALE_FACTOR = 0.1  # For scaling down ship images.
 ROTATE = {pg.K_RIGHT: 1, pg.K_LEFT: -1}
 ACCELERATE = pg.K_UP
 DECELERATE = pg.K_DOWN
-
+FIRE = pg.K_d
+BOOST = pg.K_SPACE
 
 # Set up environment.
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -36,3 +37,5 @@ ENEMIES = {
     "cruiser": {"image": GFX["ships"]["cruiser"], "guns": 2, "speed": 60, "angular": 40, "value": 2},
     "shuttle": {"image": GFX["ships"]["shuttle"], "guns": 1, "speed": 80, "angular": 100, "value": 1}
 }
+
+GFX["bullets"] = tools.load_all_gfx(os.path.join("resources", "bullets"))
