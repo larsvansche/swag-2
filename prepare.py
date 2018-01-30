@@ -33,7 +33,7 @@ GFX["ships"] = tools.load_all_gfx(os.path.join("resources", "ships"))
 
 # All enemy types
 ENEMIES = {
-    "destoryer": {"image": GFX["ships"]["destroyer"], "guns": 3, "speed": 40, "angular": 20, "value": 3},
+    "destroyer": {"image": GFX["ships"]["destroyer"], "guns": 3, "speed": 40, "angular": 20, "value": 3},
     "cruiser": {"image": GFX["ships"]["cruiser"], "guns": 2, "speed": 60, "angular": 40, "value": 2},
     "shuttle": {"image": GFX["ships"]["shuttle"], "guns": 1, "speed": 80, "angular": 100, "value": 1}
 }

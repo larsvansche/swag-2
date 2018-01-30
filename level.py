@@ -40,7 +40,7 @@ class Level(object):
         self.mid_true = list(self.mid_viewport.topleft)
         self.base_viewport = self.viewport.copy()
         self.base_true = list(self.base_viewport.topleft)
-        self.level = 5
+        self.level = 1
 
         self.makewave()
 
