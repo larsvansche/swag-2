@@ -32,7 +32,6 @@ class Player(pg.sprite.Sprite):
 
         self.bullets = pg.sprite.Group()
 
-
     def update(self, keys, bounding, dt, entities):
         """
         Updates the players position based on currently held keys.
@@ -58,7 +57,6 @@ class Player(pg.sprite.Sprite):
             self.velocity[1] = 0.0
         self.rect.clamp_ip(bounding)
         self.true_pos = list(self.rect.center)
-
 
     def check_keys(self, keys, dt):
         """
