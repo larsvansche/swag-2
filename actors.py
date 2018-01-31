@@ -4,7 +4,7 @@ This module contains the Player class for the user controlled character.
 
 import math
 import pygame as pg
-
+from pygame.math import Vector2
 import prepare
 
 
@@ -30,6 +30,8 @@ class Player(pg.sprite.Sprite):
 
         self.colissionsize = 30  # detection radius for colissions
 
+        self.bullets = pg.sprite.Group()
+
 
     def update(self, keys, bounding, dt, entities):
         """
@@ -41,6 +43,7 @@ class Player(pg.sprite.Sprite):
         self.true_pos[1] += self.velocity[1] * dt  # update y-position by vertical velocity * delta time variable
         self.rect.center = self.true_pos  # update the center of the rectangle
         self.recharge_energy()
+        self.bullets.update(dt)
         if not bounding.contains(self.rect):  # if the rectangle touches any boundaries
             self.on_boundary_collision(bounding)  # then prevent the player from going any further in that direction
 
@@ -125,7 +128,8 @@ class Player(pg.sprite.Sprite):
 
     def shoot(self, keys, dt):
         if keys[prepare.FIRE]:
-            bullet = Bullet(self.rect.centerx, self.rect.top)
+            bullet = Bullet(self.true_pos[0], self.true_pos[1], self.angle, self)
+            print(self.angle)
 
     def draw(self, surface):
         """
@@ -303,17 +307,18 @@ class Enemy(pg.sprite.Sprite):
 
 
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, x, y):
-        pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((10, 20))
+    def __init__(self, x, y, angle, player, *args):
+        pg.sprite.Sprite.__init__(self, player.bullets)
+        self.image = pg.Surface((5, 5))
         self.image.fill((138, 43, 226))
-        self.rect = self.image.get_rect()
-        self.rect.bottom = y
-        self.rect.centerx = x
-        self.speedy = -10
+        self.rect = self.image.get_rect(center=(x, y))
+        self.angle = angle - 90
+        self.speed = 5
+        self.speed_x = self.speed * math.cos(math.radians(self.angle))
+        self.speed_y = self.speed * math.sin(math.radians(self.angle))
 
-    def update(self):
-        print(self.rect.x, self.rect.y)
-        self.rect.y = self.speedy
-
+    def update(self, dt):
+        # pass
+        self.rect.x += self.speed_x
+        self.rect.y += self.speed_y
 
