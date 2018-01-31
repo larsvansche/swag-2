@@ -118,12 +118,13 @@ class Level(object):
         Blit and clear actors on the self.image layer.
         Then blit appropriate viewports of all layers.
         """
-        bullets.draw(self.image)
 
         for entity in self.entities:
             self.groupsingles[entity].clear(self.image, clear_callback)
             self.groupsingles[entity].draw(self.image)
 
+        bullets.clear(self.image, clear_callback)
+        bullets.draw(self.image)
         surface.blit(self.base, (0, 0), self.base_viewport)
         surface.blit(self.mid_image, (0, 0), self.mid_viewport)
         surface.blit(self.image, (0, 0), self.viewport)

@@ -309,7 +309,7 @@ class Enemy(pg.sprite.Sprite):
 class Bullet(pg.sprite.Sprite):
     def __init__(self, x, y, angle, player, *args):
         pg.sprite.Sprite.__init__(self, player.bullets)
-        self.image = pg.Surface((5, 5))
+        self.image = pg.Surface((2, 2))
         self.image.fill((138, 43, 226))
         self.rect = self.image.get_rect(center=(x, y))
         self.angle = angle - 90
