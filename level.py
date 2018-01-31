@@ -31,8 +31,6 @@ class Level(object):
         self.entities["player"].true_pos = list(player.rect.center)
         self.groupsingles = {"player": pg.sprite.GroupSingle(self.entities["player"])}
 
-        self.bullets = pg.sprite.Group()
-
         self.make_layers()
         self.viewport = viewport
         self.update_viewport(True)
@@ -86,7 +84,6 @@ class Level(object):
             #     print(self.entities[entity].finddirectiontoplayer(self.entities["player"]))
 
             self.entities[entity].update(keys, self.rect, dt, self.entities)
-
         self.update_viewport()
 
     def update_viewport(self, start=False):
@@ -107,19 +104,16 @@ class Level(object):
             self.base_true[1] += change[1]*0.1
             self.base_viewport.topleft = self.base_true
 
-    def draw(self, surface):
+    def draw(self, surface, bullets):
         """
         Blit and clear actors on the self.image layer.
         Then blit appropriate viewports of all layers.
         """
+        bullets.draw(self.image)
+
         for entity in self.entities:
             self.groupsingles[entity].clear(self.image, clear_callback)
             self.groupsingles[entity].draw(self.image)
-
-        # self.player_singleton.clear(self.image, clear_callback)
-        # self.player_singleton.draw(self.image)
-        # self.enemy_singleton.clear(self.image, clear_callback)
-        # self.enemy_singleton.draw(self.image)
 
         surface.blit(self.base, (0, 0), self.base_viewport)
         surface.blit(self.mid_image, (0, 0), self.mid_viewport)

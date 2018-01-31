@@ -77,10 +77,9 @@ class App(object):
         Draw all elements.  Individual actor drawing handled by level instance.
         """
         self.screen.fill(prepare.BACKGROUND_COLOR)
-        self.level.draw(self.screen)
         self.health_bar()
         self.energy_bar()
-        self.level.draw(self.screen)
+        self.level.draw(self.screen, self.player.bullets)
         pg.display.update()
 
     def main_loop(self):
