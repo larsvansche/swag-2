@@ -106,11 +106,11 @@ class Level(object):
         change = (self.viewport.centerx-old_center[0],
                   self.viewport.centery-old_center[1])
         if not start:
-            self.mid_true[0] += change[0]*0.5
-            self.mid_true[1] += change[1]*0.5
+            self.mid_true[0] += change[0] * 0.5
+            self.mid_true[1] += change[1] * 0.5
             self.mid_viewport.topleft = self.mid_true
-            self.base_true[0] += change[0]*0.1
-            self.base_true[1] += change[1]*0.1
+            self.base_true[0] += change[0] * 0.1
+            self.base_true[1] += change[1] * 0.1
             self.base_viewport.topleft = self.base_true
 
     def draw(self, surface, bullets):
@@ -123,11 +123,11 @@ class Level(object):
             self.groupsingles[entity].clear(self.image, clear_callback)
             self.groupsingles[entity].draw(self.image)
 
-        bullets.clear(self.image, clear_callback)
-        bullets.draw(self.image)
-        surface.blit(self.base, (0, 0), self.base_viewport)
-        surface.blit(self.mid_image, (0, 0), self.mid_viewport)
-        surface.blit(self.image, (0, 0), self.viewport)
+        # bullets.clear(self.image, clear_callback)
+        # bullets.draw(self.image)
+        # surface.blit(self.base, (0, 0), self.base_viewport)
+        # surface.blit(self.mid_image, (0, 0), self.mid_viewport)
+        # surface.blit(self.image, (0, 0), self.viewport)
 
 def clear_callback(surface, rect):
     """
