@@ -92,13 +92,13 @@ while True:
         client.send("tacinput1" + input_state1)
         previousinputstate1 = input_state1
     if previousinputstate1 != input_state2:
-        client.send("tacinput1" + input_state2)
+        client.send("tacinput2" + input_state2)
         previousinputstate1 = input_state2
     if previousinputstate1 != input_state3:
-        client.send("tacinput1" + input_state3)
+        client.send("tacinput3" + input_state3)
         previousinputstate1 = input_state3
     if previousinputstate1 != input_state4:
-        client.send("tacinput1" + input_state4)
+        client.send("tacinput4" + input_state4)
         previousinputstate1 = input_state4
 
 
@@ -119,21 +119,22 @@ while True:
     input_state2 = gpio.input(20)
     input_state3 = gpio.input(16)
     input_state4 = gpio.input(12)
-    if input_state1 == False:
-        print('Button1 Pressed')
-        time.sleep(0.2)
-    elif input_state2 == False:
-        print('Button2 Pressed')
-        time.sleep(0.2)
-    elif input_state3 == False:
-        print('Button3 Pressed')
-        time.sleep(0.2)
-    elif input_state4 == False:
-        print('Button4 Pressed')
-        time.sleep(0.2)
-#    print('Y value ', Y.value)
-#    print('X value ', X.value)
-    print('Pot value ', Pot.value)
+
+    # if input_state1 == False:
+    #     print('Button1 Pressed')
+    #     time.sleep(0.2)
+    # elif input_state2 == False:
+    #     print('Button2 Pressed')
+    #     time.sleep(0.2)
+    # elif input_state3 == False:
+    #     print('Button3 Pressed')
+    #     time.sleep(0.2)
+    # elif input_state4 == False:
+    #     print('Button4 Pressed')
+    #     time.sleep(0.2)
+    # print('Y value ', Y.value)
+    # print('X value ', X.value)
+    # print('Pot value ', Pot.value)
 
     previousinputstate1 = False
     previousinputstate2 = False
