@@ -26,7 +26,6 @@ class Player(pg.sprite.Sprite):
         self.thrust_strength = 0
         self.health = 100
         self.energy = 100
-        self.bullets =
 
     def update(self, keys, bounding, dt):
         """

@@ -27,7 +27,6 @@ def load_all_gfx(directory, colorkey=None, accept=(".png",".jpg",".bmp")):
             graphics[name] = img
     return graphics
 
-
 def split_sheet(sheet, size, columns, rows):
     """
     Divide a loaded sprite sheet into subsurfaces.
