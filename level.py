@@ -2,14 +2,18 @@
 This module contains the Level class.
 Drawing and updating of actors should occur here.
 """
-
+import random
+import math
 import pygame as pg
 
 import prepare
 import tools
+import actors
 
+level_width = 2048
+level_height = 2048
 
-BIG_STARS = tools.tile_surface((2048, 2048), prepare.GFX["stars"], True)
+BIG_STARS = tools.tile_surface((level_width, level_height), prepare.GFX["stars"], True)
 
 
 class Level(object):
@@ -18,21 +22,17 @@ class Level(object):
     three star layers.  The player is drawn and updated by this class.
     The player is contained in a pg.sprite.GroupSingle group.
     """
-    def __init__(self, viewport, player, enemy):
+    def __init__(self, viewport, player):
+
         self.image = BIG_STARS.copy()
         self.rect = self.image.get_rect()
 
-        player.rect.midbottom = self.rect.centerx, self.rect.bottom - 50  # set position of the player
-        player.true_pos = list(player.rect.center)
-        self.player_singleton = pg.sprite.GroupSingle(player)
-
-        enemy.rect.midbottom = self.rect.centerx, self.rect.bottom - 100
-        enemy.true_pos = list(enemy.rect.center)
-        self.enemy_singleton = pg.sprite.GroupSingle(enemy)
+        self.entities = {"player": player}
+        self.entities["player"].rect.midbottom = self.rect.centerx, self.rect.bottom - 50  # set position of the player
+        self.entities["player"].true_pos = list(player.rect.center)
+        self.groupsingles = {"player": pg.sprite.GroupSingle(self.entities["player"])}
 
         self.bullets = pg.sprite.Group()
-
-        self.entities = [self.player_singleton, self.enemy_singleton]  # add entities to levels entities
 
         self.make_layers()
         self.viewport = viewport
@@ -41,6 +41,25 @@ class Level(object):
         self.mid_true = list(self.mid_viewport.topleft)
         self.base_viewport = self.viewport.copy()
         self.base_true = list(self.base_viewport.topleft)
+        self.level = 10
+
+        self.makewave()
+
+    def makewave(self):  # method has not been tested yet
+        wantedlevel = self.level
+        for enemy in prepare.ENEMIES:
+            while wantedlevel >= prepare.ENEMIES[enemy]["value"]:
+                self.createentity(prepare.ENEMIES[enemy], (random.randint(0, level_width), random.randint(0, level_height)))
+                wantedlevel -= prepare.ENEMIES[enemy]["value"]
+
+    def createentity(self, entity, position):  # method has not been tested yet
+        identifier = len(self.entities)
+
+        self.entities[identifier] = actors.Enemy(position, entity)
+        self.entities[identifier].rect.midbottom = position[0], position[1]  # set entity position
+        self.entities[identifier].true_pos = list(self.entities[identifier].rect.center)
+
+        self.groupsingles[identifier] = pg.sprite.GroupSingle(self.entities[identifier])
 
     def make_layers(self):
         """
@@ -59,13 +78,25 @@ class Level(object):
         Updates the player and then adjusts the viewport with respect to the
         player's new position.
         """
-        # self.player_singleton.update(keys, self.rect, dt)
-        # self.enemy_singleton.update(keys, self.rect, dt)
 
         for entity in self.entities:  # for loop that updates all instantiated entities
-            entity.update(keys, self.rect, dt)
+
+            self.entities[entity].update(keys, self.rect, dt, self.entities)
+
+        self.detectplayercolission()
 
         self.update_viewport()
+
+    def detectplayercolission(self):
+        colplayer = self.entities["player"].colissionsize
+
+        for entity in self.entities:
+            if entity != "player":
+                colenemy = self.entities[entity].colissionsize
+                distancetoplayer= self.entities[entity].distancetoplayer
+
+                if distancetoplayer < colplayer + colenemy:
+                    print("BOOM")
 
     def update_viewport(self, start=False):
         """
@@ -73,7 +104,7 @@ class Level(object):
         approaches the edge of the map.
         """
         old_center = self.viewport.center
-        self.viewport.center = self.player_singleton.sprite.rect.center
+        self.viewport.center = self.groupsingles["player"].sprite.rect.center
         self.viewport.clamp_ip(self.rect)
         change = (self.viewport.centerx-old_center[0],
                   self.viewport.centery-old_center[1])
@@ -90,10 +121,15 @@ class Level(object):
         Blit and clear actors on the self.image layer.
         Then blit appropriate viewports of all layers.
         """
-        self.player_singleton.clear(self.image, clear_callback)
-        self.player_singleton.draw(self.image)
-        self.enemy_singleton.clear(self.image, clear_callback)
-        self.enemy_singleton.draw(self.image)
+        for entity in self.entities:
+            self.groupsingles[entity].clear(self.image, clear_callback)
+            self.groupsingles[entity].draw(self.image)
+
+        # self.player_singleton.clear(self.image, clear_callback)
+        # self.player_singleton.draw(self.image)
+        # self.enemy_singleton.clear(self.image, clear_callback)
+        # self.enemy_singleton.draw(self.image)
+
         surface.blit(self.base, (0, 0), self.base_viewport)
         surface.blit(self.mid_image, (0, 0), self.mid_viewport)
         surface.blit(self.image, (0, 0), self.viewport)

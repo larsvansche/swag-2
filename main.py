@@ -1,6 +1,5 @@
 #!/usr/bin/env python 
 import sys
-import random
 import pygame as pg
 
 # Importing prepare initializes the display.
@@ -23,8 +22,8 @@ class App(object):
         # ship = random.choice(list(prepare.GFX["ships"].values()))
         ship = list(prepare.GFX["ships"].values())[7]  # pick first ship available
         self.player = actors.Player((0, 0), ship)
-        self.enemy = actors.Enemy((0, 0), ship)
-        self.level = level.Level(self.screen_rect.copy(), self.player, self.enemy)
+        self.level = level.Level(self.screen_rect.copy(), self.player)
+
         self.energyloss_counter = 0
         self.energygain_counter = 0
 
