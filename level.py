@@ -3,6 +3,7 @@ This module contains the Level class.
 Drawing and updating of actors should occur here.
 """
 import random
+import math
 import pygame as pg
 
 import prepare
@@ -27,7 +28,7 @@ class Level(object):
         self.rect = self.image.get_rect()
 
         self.entities = {"player": player}
-        self.entities["player"].rect.midbottom = self.rect.centerx, self.rect.bottom - 50  # set position of the player
+        self.entities["player"].rect.midbottom = self.rect.centerx, self.rect.centery  # set position of the player
         self.entities["player"].true_pos = list(player.rect.center)
         self.groupsingles = {"player": pg.sprite.GroupSingle(self.entities["player"])}
 
@@ -38,7 +39,7 @@ class Level(object):
         self.mid_true = list(self.mid_viewport.topleft)
         self.base_viewport = self.viewport.copy()
         self.base_true = list(self.base_viewport.topleft)
-        self.level = 1
+        self.level = 10
 
         self.makewave()
 
@@ -75,16 +76,23 @@ class Level(object):
         Updates the player and then adjusts the viewport with respect to the
         player's new position.
         """
-        # self.player_singleton.update(keys, self.rect, dt)
-        # self.enemy_singleton.update(keys, self.rect, dt)
 
         for entity in self.entities:  # for loop that updates all instantiated entities
-            # if entity != "player":
-            #     self.entities[entity].finddistancetoplayer(self.entities["player"])
-            #     print(self.entities[entity].finddirectiontoplayer(self.entities["player"]))
 
             self.entities[entity].update(keys, self.rect, dt, self.entities)
+        self.detectplayercolission()
         self.update_viewport()
+
+    def detectplayercolission(self):
+        colplayer = self.entities["player"].colissionsize
+
+        for entity in self.entities:
+            if entity != "player":
+                colenemy = self.entities[entity].colissionsize
+                distancetoplayer= self.entities[entity].distancetoplayer
+
+                if distancetoplayer < colplayer + colenemy:
+                    print("BOOM")
 
     def update_viewport(self, start=False):
         """
