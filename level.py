@@ -94,7 +94,6 @@ class Level(object):
                 if distancetoplayer < colplayer + colenemy:
                     self.entities["player"].health -= 1
 
-
     def update_viewport(self, start=False):
         """
         The viewport will stay centered on the player unless the player

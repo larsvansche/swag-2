@@ -317,8 +317,7 @@ class Bullet(pg.sprite.Sprite):
         self.speed_x = self.speed * math.cos(math.radians(self.angle))
         self.speed_y = self.speed * math.sin(math.radians(self.angle))
 
-    def update(self, dt):
-        # pass
+    def update(self):
         self.rect.x += self.speed_x
         self.rect.y += self.speed_y
 
