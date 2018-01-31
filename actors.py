@@ -19,7 +19,7 @@ class Player(pg.sprite.Sprite):
         self.acceleration = 12  # set max acceleration
         self.velocity = [0.0, 0.0]  # set velocity to 0 on both axis
         self.original = pg.transform.rotozoom(image, 0, prepare.SCALE_FACTOR)
-        self.angle = 90.0  # player orientation at the start of the game (facing up)
+        self.angle = 0.0  # player orientation at the start of the game (facing up)
         self.image = pg.transform.rotozoom(self.original, -self.angle, 1)  # Rotate image to right direction
         self.rect = self.image.get_rect(center=pos)  # get rectangle for player
         self.true_pos = list(self.rect.center)  # assign the center of the rectangle to the true position
@@ -28,7 +28,7 @@ class Player(pg.sprite.Sprite):
         self.health = 100
         self.energy = 100
 
-        self.colissionsize = 100  # detection radius for colissions
+        self.colissionsize = 30  # detection radius for colissions
 
 
     def update(self, keys, bounding, dt, entities):
@@ -55,6 +55,7 @@ class Player(pg.sprite.Sprite):
             self.velocity[1] = 0.0
         self.rect.clamp_ip(bounding)
         self.true_pos = list(self.rect.center)
+
 
     def check_keys(self, keys, dt):
         """
@@ -154,7 +155,7 @@ class Enemy(pg.sprite.Sprite):
         self.distancetoplayer = 0
         self.directiontoplayer = 0
         self.rotatedirection = 0
-        self.colissionsize = 50  # detection radius for colissions
+        self.colissionsize = 10  # detection radius for colissions
 
     def update(self, keys, bounding, dt, entities):
         """

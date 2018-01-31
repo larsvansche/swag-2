@@ -28,7 +28,7 @@ class Level(object):
         self.rect = self.image.get_rect()
 
         self.entities = {"player": player}
-        self.entities["player"].rect.midbottom = self.rect.centerx, self.rect.bottom - 50  # set position of the player
+        self.entities["player"].rect.midbottom = self.rect.centerx, self.rect.centery  # set position of the player
         self.entities["player"].true_pos = list(player.rect.center)
         self.groupsingles = {"player": pg.sprite.GroupSingle(self.entities["player"])}
 
@@ -41,7 +41,7 @@ class Level(object):
         self.mid_true = list(self.mid_viewport.topleft)
         self.base_viewport = self.viewport.copy()
         self.base_true = list(self.base_viewport.topleft)
-        self.level = 10
+        self.level = 25
 
         self.makewave()
 
@@ -96,7 +96,8 @@ class Level(object):
                 distancetoplayer= self.entities[entity].distancetoplayer
 
                 if distancetoplayer < colplayer + colenemy:
-                    print("BOOM")
+                    self.entities["player"].health -= 1
+
 
     def update_viewport(self, start=False):
         """

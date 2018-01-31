@@ -11,7 +11,7 @@ import level
 class App(object):
     def __init__(self):
         """
-        This is the main class that runs the program.
+        This is the main class that runs t he program.
         """
         self.screen = pg.display.get_surface()
         self.screen_rect = self.screen.get_rect()
