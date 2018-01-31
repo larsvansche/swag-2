@@ -3,6 +3,7 @@ from gpiozero import MCP3008, Button, LED
 from time import sleep
 import RPi.GPIO as gpio
 import time
+import client
 
 directions = []
 buttons = []
@@ -11,10 +12,23 @@ buttons = []
 #X = MCP3008(2)
 Pot = MCP3008(0)
 
+previouspotvalue = 0
+
+input_state1 = False
+input_state2 = False
+input_state3 = False
+input_state4 = False
+
+previousinputstate1 = False
+previousinputstate2 = False
+previousinputstate3 = False
+previousinputstate4 = False
+
 gpio.setup(21, gpio.IN, pull_up_down=gpio.PUD_UP)
 gpio.setup(20, gpio.IN, pull_up_down=gpio.PUD_UP)
 gpio.setup(16, gpio.IN, pull_up_down=gpio.PUD_UP)
 gpio.setup(12, gpio.IN, pull_up_down=gpio.PUD_UP)
+
 
 class joyStick:
     def __init__(self, channel, direction):
@@ -27,9 +41,9 @@ class joyStick:
         intChan = int(chan.value * 100)
         if intChan == 100:
             retVal = 10
-        elif intChan < 40 :
+        elif intChan < 40:
             retVal = -1
-        elif intChan > 60 :
+        elif intChan > 60:
             retVal = 1
         else :
             retVal = 0
@@ -70,18 +84,36 @@ YellowLed = LED(19)
 GreenLed = LED(26)
 
 while True:
-    if Pot.value > 0.67:
-        RedLed.off()
-        YellowLed.off()
-        GreenLed.on()
-    elif Pot.value > 0.34:
-        RedLed.off()
-        YellowLed.on()
-        GreenLed.off()
-    elif Pot.value < 0.339:
-        RedLed.on()
-        YellowLed.off()
-        GreenLed.off()
+    if Pot.value != previouspotvalue:
+        client.send("tacPot1" + Pot.value)
+        previouspotvalue = Pot.value
+
+    if previousinputstate1 != input_state1:
+        client.send("tacinput1" + input_state1)
+        previousinputstate1 = input_state1
+    if previousinputstate1 != input_state2:
+        client.send("tacinput1" + input_state2)
+        previousinputstate1 = input_state2
+    if previousinputstate1 != input_state3:
+        client.send("tacinput1" + input_state3)
+        previousinputstate1 = input_state3
+    if previousinputstate1 != input_state4:
+        client.send("tacinput1" + input_state4)
+        previousinputstate1 = input_state4
+
+
+    # if Pot.value > 0.67:
+    #     RedLed.off()
+    #     YellowLed.off()
+    #     GreenLed.on()
+    # elif Pot.value > 0.34:
+    #     RedLed.off()
+    #     YellowLed.on()
+    #     GreenLed.off()
+    # elif Pot.value < 0.339:
+    #     RedLed.on()
+    #     YellowLed.off()
+    #     GreenLed.off()
     
     input_state1 = gpio.input(21)
     input_state2 = gpio.input(20)
@@ -102,6 +134,12 @@ while True:
 #    print('Y value ', Y.value)
 #    print('X value ', X.value)
     print('Pot value ', Pot.value)
+
+    previousinputstate1 = False
+    previousinputstate2 = False
+    previousinputstate3 = False
+    previousinputstate4 = False
+
     sleep(0.1)
 
 ##while True:

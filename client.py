@@ -15,9 +15,9 @@ def receive():
             break
 
 
-def send(event=None):  # event is passed by binders.
+def send(msg):  # event is passed by binders.
     """Handles sending of messages."""
-    msg = my_msg.get()
+    # msg = my_msg.get()
     my_msg.set("")  # Clears input field.
     client_socket.send(bytes(msg, "utf8"))
     if msg == "{quit}":
