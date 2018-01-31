@@ -14,8 +14,8 @@ def accept_incoming_connections():
 
 def handle_client(client):  # Takes client socket as argument.
     """Handles a single client connection."""
-
     name = client.recv(BUFSIZ).decode("utf8")
+    print("Client entered: " + name)
     welcome = 'Welcome %s! If you ever want to quit, type {quit} to exit.' % name
     client.send(bytes(welcome, "utf8"))
     msg = "%s has joined the chat!" % name
@@ -36,6 +36,8 @@ def handle_client(client):  # Takes client socket as argument.
 
 def broadcast(msg, prefix=""):  # prefix is for name identification.
     """Broadcasts a message to all the clients."""
+
+    print(msg)
 
     for sock in clients:
         sock.send(bytes(prefix, "utf8") + msg)
