@@ -43,7 +43,7 @@ class Player(pg.sprite.Sprite):
         self.true_pos[1] += self.velocity[1] * dt  # update y-position by vertical velocity * delta time variable
         self.rect.center = self.true_pos  # update the center of the rectangle
         self.recharge_energy()
-        self.bullets.update(dt)
+        self.bullets.update()
         if not bounding.contains(self.rect):  # if the rectangle touches any boundaries
             self.on_boundary_collision(bounding)  # then prevent the player from going any further in that direction
 
@@ -160,6 +160,7 @@ class Enemy(pg.sprite.Sprite):
         self.directiontoplayer = 0
         self.rotatedirection = 0
         self.colissionsize = 10  # detection radius for colissions
+        self.health = 100
 
     def update(self, keys, bounding, dt, entities):
         """
