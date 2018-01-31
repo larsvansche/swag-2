@@ -28,7 +28,7 @@ class Level(object):
         self.rect = self.image.get_rect()
 
         self.entities = {"player": player}
-        self.entities["player"].rect.midbottom = self.rect.centerx, self.rect.bottom - 50  # set position of the player
+        self.entities["player"].rect.midbottom = self.rect.centerx, self.rect.centery  # set position of the player
         self.entities["player"].true_pos = list(player.rect.center)
         self.groupsingles = {"player": pg.sprite.GroupSingle(self.entities["player"])}
 
