@@ -158,6 +158,7 @@ class Enemy(pg.sprite.Sprite):
         self.directiontoplayer = 0
         self.rotatedirection = 0
         self.colissionsize = 10  # detection radius for colissions
+        self.health = 100
 
     def update(self, keys, bounding, dt, entities):
         """

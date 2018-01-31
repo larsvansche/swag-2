@@ -93,6 +93,7 @@ class Level(object):
 
                 if distancetoplayer < colplayer + colenemy:
                     self.entities["player"].health -= 1
+                    self.entities[entity].health -= 20
 
     def update_viewport(self, start=False):
         """
@@ -128,12 +129,12 @@ class Level(object):
         surface.blit(self.mid_image, (0, 0), self.mid_viewport)
         surface.blit(self.image, (0, 0), self.viewport)
 
-
 def clear_callback(surface, rect):
     """
     We need this callback because the clearing background contains
     transparency.  We need to fill the rect with transparency first.
     """
+
     surface.fill((0, 0, 0, 0), rect)
     surface.blit(BIG_STARS, rect, rect)
 
