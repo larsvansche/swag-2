@@ -27,7 +27,7 @@ class Player(pg.sprite.Sprite):
         self.thrust_strength = 0
         self.health = 100
         self.energy = 100
-        self.colissionsize = 10  # radius for
+        self.colissionsize = 100  # detection radius for colissions
 
     def update(self, keys, bounding, dt, entities):
         """
@@ -152,6 +152,7 @@ class Enemy(pg.sprite.Sprite):
         self.distancetoplayer = 0
         self.directiontoplayer = 0
         self.rotatedirection = 0
+        self.colissionsize = 50  # detection radius for colissions
 
     def update(self, keys, bounding, dt, entities):
         """

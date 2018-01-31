@@ -3,6 +3,7 @@ This module contains the Level class.
 Drawing and updating of actors should occur here.
 """
 import random
+import math
 import pygame as pg
 
 import prepare
@@ -77,22 +78,25 @@ class Level(object):
         Updates the player and then adjusts the viewport with respect to the
         player's new position.
         """
-        # self.player_singleton.update(keys, self.rect, dt)
-        # self.enemy_singleton.update(keys, self.rect, dt)
 
         for entity in self.entities:  # for loop that updates all instantiated entities
-            # if entity != "player":
-            #     self.entities[entity].finddistancetoplayer(self.entities["player"])
-            #     print(self.entities[entity].finddirectiontoplayer(self.entities["player"]))
 
             self.entities[entity].update(keys, self.rect, dt, self.entities)
 
-        self.detectcollision()
+        self.detectplayercolission()
 
         self.update_viewport()
 
-    def detectcollision(self):
-        print(self.entities)
+    def detectplayercolission(self):
+        colplayer = self.entities["player"].colissionsize
+
+        for entity in self.entities:
+            if entity != "player":
+                colenemy = self.entities[entity].colissionsize
+                distancetoplayer= self.entities[entity].distancetoplayer
+
+                if distancetoplayer < colplayer + colenemy:
+                    print("BOOM")
 
     def update_viewport(self, start=False):
         """
