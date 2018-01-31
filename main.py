@@ -36,21 +36,21 @@ class App(object):
         else:
             health_color = (255, 0, 0) # Health beneath 25 = red
 
-            pg.draw.rect(self.screen, health_color, (10, 20 , self.player.health, 15))  # Shape and location of health bar
+            pg.draw.rect(self.screen, health_color, (10, 20, self.player.health, 15))  # Shape and location of health bar
 
     # Creates health bar for enemies
-    def enemy_health(self):
-        for entity in self.level.entities:
-            if entity != 'player':
-                if self.level.entities[entity].health >= 75:
-                    health_color = (0, 128, 0)  # Health above or equal to 75 = green
-                elif self.level.entities[entity].health > 25:
-                    health_color = (255, 255, 0)  # Health above 25 = yellow
-                else:
-                    health_color = (255, 0, 0)  # Health beneath 25 = red
-
-
-                pg.draw.rect(self.level.image, health_color, (self.level.entities[entity].true_pos[0], self.level.entities[entity].true_pos[1] + 25, 10, 20), 10)
+    # def enemy_health(self):
+    #     for entity in self.level.entities:
+    #         if entity != 'player':
+    #             if self.level.entities[entity].health >= 75:
+    #                 health_color = (0, 128, 0)  # Health above or equal to 75 = green
+    #             elif self.level.entities[entity].health > 25:
+    #                 health_color = (255, 255, 0)  # Health above 25 = yellow
+    #             else:
+    #                 health_color = (255, 0, 0)  # Health beneath 25 = red
+    #
+    #
+    #             pg.draw.rect(self.level.image, health_color, (self.level.entities[entity].true_pos[0], self.level.entities[entity].true_pos[1] + 25, 10, 20), 5)
 
 
 
@@ -94,7 +94,7 @@ class App(object):
         """
         self.screen.fill(prepare.BACKGROUND_COLOR)
         self.health_bar()
-        self.enemy_health()
+        # self.enemy_health()
         self.energy_bar()
         self.level.draw(self.screen, self.player.bullets)
         pg.display.update()
@@ -112,7 +112,7 @@ class App(object):
             dt = self.clock.tick(self.fps)/1000.0  # create delta time variable to multiply with movement and rotation
             self.display_fps()
             self.health_bar()
-            self.enemy_health()
+            # self.enemy_health()
             self.energy_bar()
 
 

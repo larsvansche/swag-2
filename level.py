@@ -10,8 +10,8 @@ import prepare
 import tools
 import actors
 
-level_width = 2048
-level_height = 2048
+level_width = 700
+level_height = 500
 
 BIG_STARS = tools.tile_surface((level_width, level_height), prepare.GFX["stars"], True)
 
@@ -39,7 +39,7 @@ class Level(object):
         self.mid_true = list(self.mid_viewport.topleft)
         self.base_viewport = self.viewport.copy()
         self.base_true = list(self.base_viewport.topleft)
-        self.level = 25
+        self.level = 40
 
         self.makewave()
 
@@ -93,7 +93,20 @@ class Level(object):
 
                 if distancetoplayer < colplayer + colenemy:
                     self.entities["player"].health -= 1
-                    self.entities[entity].health -= 20
+                    self.entities[entity].health -= 1
+
+
+    def detectbulletcolission(self):
+        colbullet = self.entities["bullet"].colissionsize
+
+        for entity in self.entities:
+            if entity != "bullet":
+                colenemy = self.entities[entity].colissionsize
+                distancetobullet= self.entities[entity].distancetobullet
+
+                if distancetobullet < colbullet + colenemy:
+                    self.entities[entity].health -=100
+
 
     def update_viewport(self, start=False):
         """
@@ -129,6 +142,7 @@ class Level(object):
         surface.blit(self.mid_image, (0, 0), self.mid_viewport)
         surface.blit(self.image, (0, 0), self.viewport)
 
+
 def clear_callback(surface, rect):
     """
     We need this callback because the clearing background contains
@@ -137,4 +151,5 @@ def clear_callback(surface, rect):
 
     surface.fill((0, 0, 0, 0), rect)
     surface.blit(BIG_STARS, rect, rect)
+
 

@@ -159,6 +159,7 @@ class Enemy(pg.sprite.Sprite):
         self.rotatedirection = 0
         self.colissionsize = 10  # detection radius for colissions
         self.health = 100
+        self.distancetobullet=0
 
     def update(self, keys, bounding, dt, entities):
         """
@@ -167,6 +168,9 @@ class Enemy(pg.sprite.Sprite):
 
         self.finddistancetoplayer(entities["player"])
         self.finddirectiontoplayer(entities["player"])
+
+        self.finddistancetoplayer(entities["bullet"])
+        self.finddirectiontoplayer(entities["bullet"])
 
         if self.status == "agressive" or self.status == "kamikaze":
             self.movetoplayer()
@@ -181,6 +185,9 @@ class Enemy(pg.sprite.Sprite):
         self.rect.center = self.true_pos  # update the center of the rectangle
         if not bounding.contains(self.rect):  # if the rectangle touches any boundaries
             self.on_boundary_collision(bounding)  # then prevent the player from going any further in that direction
+
+        if self.health <=0:
+            self.kill()
 
     def finddistancetoplayer(self, player):
         relativex = self.true_pos[0] - player.true_pos[0]
