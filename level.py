@@ -31,7 +31,7 @@ class Level(object):
         self.entities = {"player": player}
         self.entities["player"].rect.midbottom = self.rect.centerx, self.rect.centery  # set position of the player
         self.entities["player"].true_pos = list(player.rect.center)
-        self.groupsingles = {"player": pg.sprite.GroupSingle(self.entities["player"])}
+        self.groups = {"player": pg.sprite.GroupSingle(self.entities["player"])}
 
         self.totalentities = len(self.entities)
 
@@ -61,7 +61,9 @@ class Level(object):
         self.entities[identifier].rect.midbottom = position[0], position[1]  # set entity position
         self.entities[identifier].true_pos = list(self.entities[identifier].rect.center)
 
-        self.groupsingles[identifier] = pg.sprite.GroupSingle(self.entities[identifier])
+        healthbar = pg.draw.rect(self.image, (0, 128, 0), (self.entities[identifier].true_pos[0], self.entities[identifier].true_pos[1] + 50, 30, 10), 0)
+
+        self.groups[identifier] = pg.sprite.Group(self.entities[identifier], healthbar)
 
     def createbullet(self, position, angle):  # method has not been tested yet
         self.totalentities += 1
@@ -71,7 +73,14 @@ class Level(object):
         self.entities[identifier].rect.midbottom = position[0], position[1]  # set entity position
         self.entities[identifier].true_pos = list(self.entities[identifier].rect.center)
 
-        self.groupsingles[identifier] = pg.sprite.GroupSingle(self.entities[identifier])
+        self.groups[identifier] = pg.sprite.GroupSingle(self.entities[identifier])
+        self.groups[identifier].clear(self.image, clear_callback)
+
+    # def createhealthbar(self):
+    #     self.totalentities += 1
+    #     identifier = self.totalentities
+    #
+    #     self.groupsingles[identifier].clear(self.image, clear_callback)
 
     def make_layers(self):
         """
@@ -102,6 +111,7 @@ class Level(object):
         self.update_viewport()
 
         for kill in dead:
+            self.groups[kill].clear(self.image, clear_callback)
             del self.entities[kill]
 
         del dead
@@ -143,7 +153,7 @@ class Level(object):
         approaches the edge of the map.
         """
         old_center = self.viewport.center
-        self.viewport.center = self.groupsingles["player"].sprite.rect.center
+        self.viewport.center = self.groups["player"].sprite.rect.center
         self.viewport.clamp_ip(self.rect)
         change = (self.viewport.centerx-old_center[0], self.viewport.centery-old_center[1])
         if not start:
@@ -161,8 +171,8 @@ class Level(object):
         """
 
         for entity in self.entities:
-            self.groupsingles[entity].clear(self.image, clear_callback)
-            self.groupsingles[entity].draw(self.image)
+            self.groups[entity].clear(self.image, clear_callback)
+            self.groups[entity].draw(self.image)
 
         surface.blit(self.base, (0, 0), self.base_viewport)
         surface.blit(self.mid_image, (0, 0), self.mid_viewport)

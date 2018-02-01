@@ -50,7 +50,7 @@ class App(object):
                     health_color = (255, 0, 0)  # Health beneath 25 = red
 
                 # self.level.image.clear()
-                self.level.entities[entity].health_bar = pg.draw.rect(self.level.image, health_color, (self.level.entities[entity].true_pos[0], self.level.entities[entity].true_pos[1] + 50, 30, 10), 0)
+                # self.level.createhealthbar(pg.draw.rect(self.level.image, health_color, (self.level.entities[entity].true_pos[0], self.level.entities[entity].true_pos[1] + 50, 30, 10), 0))
 
     # Creates energy bar for player
     def energy_bar(self):
