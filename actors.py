@@ -3,6 +3,7 @@ This module contains the Player class for the user controlled character.
 """
 
 import math
+import time
 import pygame as pg
 from pygame.math import Vector2
 import prepare
@@ -25,24 +26,29 @@ class Player(pg.sprite.Sprite):
         self.true_pos = list(self.rect.center)  # assign the center of the rectangle to the true position
         self.angular_speed = 30.0  # set rotation speed of player
         self.thrust_strength = 0
-        self.health = 100
-        self.energy = 100
-
+        self.max_health = 100
+        self.health = 80  # self.max_health
+        self.heal_rate = 3
+        self.max_energy = 100
+        self.energy = self.max_energy
+        self.energy_rate = 1
         self.colissionsize = 30  # detection radius for colissions
-
         self.bullets = pg.sprite.Group()
+        self.fire = False
+        self.firerate = 0.2
+        self.timeatshot = time.time()
 
     def update(self, keys, bounding, dt, entities):
         """
         Updates the players position based on currently held keys.
         """
-
         self.check_keys(keys, dt)  # run function check_keys that checks if keys are pressed
         self.true_pos[0] += self.velocity[0] * dt  # update x-position by horizontal velocity * delta time variable
         self.true_pos[1] += self.velocity[1] * dt  # update y-position by vertical velocity * delta time variable
         self.rect.center = self.true_pos  # update the center of the rectangle
-        self.recharge_energy()
-        self.bullets.update()
+        self.heal(dt)
+        self.recharge_energy(dt)
+
         if not bounding.contains(self.rect):  # if the rectangle touches any boundaries
             self.on_boundary_collision(bounding)  # then prevent the player from going any further in that direction
 
@@ -71,16 +77,17 @@ class Player(pg.sprite.Sprite):
         if keys[prepare.BOOST] and self.energy > 0:
             self.top_speed = 350
             self.acceleration = 20
-            self.energy -= 60 / 60
+            self.energy -= 2
         else:
             self.top_speed = 100
 
-    # def energy_use(self, keys):
-    #     if keys[prepare.BOOST]:
-    #        # if not
-    def recharge_energy(self):
-        if self.energy < 100:
-            self.energy += 3 / 60
+    def recharge_energy(self, dt):
+        if self.energy < self.max_energy:
+            self.energy += self.energy_rate
+
+    def heal(self, dt):
+        if self.health < self.max_health:
+            self.health += self.heal_rate * dt
 
     def rotate(self, keys, dt):
         """
@@ -125,9 +132,13 @@ class Player(pg.sprite.Sprite):
             self.velocity[1] = self.top_speed * math.sin(angle)
 
     def shoot(self, keys, dt):
+        # if keys[prepare.FIRE]:
+        #     bullet = Bullet(self.true_pos[0], self.true_pos[1], self.angle, self)
+        #     print(self.angle)
         if keys[prepare.FIRE]:
-            bullet = Bullet(self.true_pos[0], self.true_pos[1], self.angle, self)
-            print(self.angle)
+            self.fire = True
+        else:
+            self.fire = False
 
     def draw(self, surface):
         """
@@ -306,17 +317,59 @@ class Enemy(pg.sprite.Sprite):
 
 
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, x, y, angle, player, *args):
-        pg.sprite.Sprite.__init__(self, player.bullets)
-        self.image = pg.Surface((2, 2))
-        self.image.fill((138, 43, 226))
-        self.rect = self.image.get_rect(center=(x, y))
-        self.angle = angle - 90
-        self.speed = 5
-        self.speed_x = self.speed * math.cos(math.radians(self.angle))
-        self.speed_y = self.speed * math.sin(math.radians(self.angle))
+    """
+    This class represents our user controlled character.
+    """
 
-    def update(self):
-        self.rect.x += self.speed_x
-        self.rect.y += self.speed_y
+    def __init__(self, pos, angle, *groups):  # instantiate player
+        super(Bullet, self).__init__(*groups)
+        self.velocity = [0.0, 0.0]  # set velocity to 0 on both axis
+        self.original = pg.transform.rotozoom(prepare.GFX["bullets"]["bullet"], 0, prepare.SCALE_FACTOR)
+        self.angle = angle  # player orientation at the start of the game
+        self.image = pg.transform.rotozoom(self.original, -self.angle, 1)  # Rotate image to right direction
+        self.rect = self.image.get_rect(center=pos)  # get rectangle for player
+        self.true_pos = [0, 0]  # list(self.rect.center)  # assign the center of the rectangle to the true position
+        self.thrust_strength = 8000
+        self.status = "agressive"
+        self.colissionsize = 3  # detection radius for colissions
+        self.health = 15
+        self.distancetoplayer = 10000  # set it immensly high so it will never mess with the player
 
+    def update(self, keys, bounding, dt, entities):
+        """
+        Updates the players position based on currently held keys.
+        """
+
+        if self.health <= 0:
+            self.kill()
+
+        self.thrust(dt)
+
+        self.true_pos[0] += self.velocity[0] * dt  # update x-position by horizontal velocity * delta time variable
+        self.true_pos[1] += self.velocity[1] * dt  # update y-position by vertical velocity * delta time variable
+        self.rect.center = self.true_pos  # update the center of the rectangle
+        if not bounding.contains(self.rect):  # if the rectangle touches any boundaries
+            self.on_boundary_collision(bounding)  # then prevent the player from going any further in that direction
+
+    def on_boundary_collision(self, bounding):
+        """
+        If the ship hits the edge of the map, zero acceleration in that
+        direction.
+        """
+        if self.rect.x < bounding.x or self.rect.right > bounding.right or self.rect.y < bounding.y or self.rect.bottom > bounding.bottom:
+            self.health = 0
+
+    def thrust(self, dt):
+        """
+        Adjust velocity if the thrust key is held.
+        """
+
+        rads = math.radians(self.angle)  # get angle in radians
+        self.velocity[0] = math.sin(rads) * dt * self.thrust_strength  # set horizontal velocity to acceleration * cosine of angle * delta time
+        self.velocity[1] = -math.cos(rads) * dt * self.thrust_strength  # set vertical velocity to acceleration * cosine of angle * delta time
+
+    def draw(self, surface):
+        """
+        Basic draw function. (not used if drawing via groups)
+        """
+        surface.blit(self.image, self.rect)

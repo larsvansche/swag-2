@@ -30,18 +30,18 @@ class App(object):
     # Creates health bar for player
     def health_bar(self):
         if self.player.health >= 75:
-            health_color = (0, 128, 0) # Health above or equal to 75 = green
+            health_color = (0, 128, 0)  # Health above or equal to 75 = green
         elif self.player.health > 25:
-            health_color = (255, 255, 0) # Health above 25 = yellow
+            health_color = (255, 255, 0)  # Health above 25 = yellow
         else:
-            health_color = (255, 0, 0) # Health beneath 25 = red
+            health_color = (255, 0, 0)  # Health beneath 25 = red
 
-            pg.draw.rect(self.screen, health_color, (10, 20 , self.player.health, 15))  # Shape and location of health bar
+        pg.draw.rect(self.screen, health_color, (10, 20, self.player.health, 15))  # Shape and location of health bar
 
     # Creates health bar for enemies
     def enemy_health(self):
         for entity in self.level.entities:
-            if entity != 'player':
+            if entity != "player" and self.level.entities[entity].__class__.__name__ != "Bullet":  # check if entity is not player or bullet
                 if self.level.entities[entity].health >= 75:
                     health_color = (0, 128, 0)  # Health above or equal to 75 = green
                 elif self.level.entities[entity].health > 25:
@@ -49,19 +49,17 @@ class App(object):
                 else:
                     health_color = (255, 0, 0)  # Health beneath 25 = red
 
-
-                pg.draw.rect(self.level.image, health_color, (self.level.entities[entity].true_pos[0], self.level.entities[entity].true_pos[1] + 25, 10, 20), 10)
-
-
+                # self.level.image.clear()
+                self.level.entities[entity].health_bar = pg.draw.rect(self.level.image, health_color, (self.level.entities[entity].true_pos[0], self.level.entities[entity].true_pos[1] + 50, 30, 10), 0)
 
     # Creates energy bar for player
     def energy_bar(self):
         if self.player.energy >= 75:
-            energy_color = (0, 0, 255) # Energy above or equal to 50 = blue
+            energy_color = (0, 0, 255)  # Energy above or equal to 75 = blue
         elif self.player.energy > 25:
-            energy_color = (30, 144, 255) # Energy above than 25 = dodgerblue1
+            energy_color = (30, 144, 255)  # Energy above 25 = dodgerblue1
         else:
-            energy_color = (0, 238, 238) # Energy beneath 25 = cyan2
+            energy_color = (0, 238, 238)  # Energy beneath 25 = cyan2
         pg.draw.rect(self.screen, energy_color, (10, 40, self.player.energy, 10))
 
     def event_loop(self):
@@ -90,13 +88,13 @@ class App(object):
         
     def render(self):
         """
-        Draw all elements.  Individual actor drawing handled by level instance.
+        Draw all elements. Individual actor drawing handled by level instance.
         """
         self.screen.fill(prepare.BACKGROUND_COLOR)
         self.health_bar()
         self.enemy_health()
         self.energy_bar()
-        self.level.draw(self.screen, self.player.bullets)
+        self.level.draw(self.screen)
         pg.display.update()
 
     def main_loop(self):
