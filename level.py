@@ -61,9 +61,13 @@ class Level(object):
         self.entities[identifier].rect.midbottom = position[0], position[1]  # set entity position
         self.entities[identifier].true_pos = list(self.entities[identifier].rect.center)
 
-        healthbar = pg.draw.rect(self.image, (0, 128, 0), (self.entities[identifier].true_pos[0], self.entities[identifier].true_pos[1] + 50, 30, 10), 0)
+        # healthbar = pg.draw.rect(self.image, (0, 128, 0), (self.entities[identifier].true_pos[0], self.entities[identifier].true_pos[1] + 50, 30, 10), 0)
 
-        self.groups[identifier] = pg.sprite.Group(self.entities[identifier], healthbar)
+        # healthbar = pg.sprite.Sprite()
+        # healthbar.image = prepare.ENEMIES["shuttle"]["image"]
+        # healthbar.rect = pg.draw.rect(self.image, (0, 128, 0), (self.entities[identifier].true_pos[0], self.entities[identifier].true_pos[1] + 50, 30, 10), 0)
+
+        self.groups[identifier] = pg.sprite.Group(self.entities[identifier])
 
     def createbullet(self, position, angle):  # method has not been tested yet
         self.totalentities += 1
