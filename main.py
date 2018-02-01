@@ -27,6 +27,9 @@ class App(object):
         self.energyloss_counter = 0
         self.energygain_counter = 0
 
+    def receive(self, msg):
+        print("message: " + msg)
+
     # Creates health bar for player
     def health_bar(self):
         if self.player.health >= 75:
