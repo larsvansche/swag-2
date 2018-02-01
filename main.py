@@ -28,7 +28,7 @@ class App(object):
         self.energygain_counter = 0
 
     def receive(self, msg):
-        print(msg)
+        print("message: " + msg)
 
     # Creates health bar for player
     def health_bar(self):
