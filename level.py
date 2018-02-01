@@ -11,8 +11,8 @@ import prepare
 import tools
 import actors
 
-level_width = 700
-level_height = 500
+level_width = 1000
+level_height = 1000
 
 BIG_STARS = tools.tile_surface((level_width, level_height), prepare.GFX["stars"], True)
 
@@ -24,7 +24,6 @@ class Level(object):
     The player is contained in a pg.sprite.GroupSingle group.
     """
     def __init__(self, viewport, player):
-
         self.image = BIG_STARS.copy()
         self.rect = self.image.get_rect()
 
@@ -42,7 +41,7 @@ class Level(object):
         self.mid_true = list(self.mid_viewport.topleft)
         self.base_viewport = self.viewport.copy()
         self.base_true = list(self.base_viewport.topleft)
-        self.level = 3
+        self.level = 1
 
         self.makewave()
 
@@ -61,9 +60,9 @@ class Level(object):
         self.entities[identifier].rect.midbottom = position[0], position[1]  # set entity position
         self.entities[identifier].true_pos = list(self.entities[identifier].rect.center)
 
-        healthbar = pg.draw.rect(self.image, (0, 128, 0), (self.entities[identifier].true_pos[0], self.entities[identifier].true_pos[1] + 50, 30, 10), 0)
+        # healthbar = pg.draw.rect(self.image, (0, 128, 0), (self.entities[identifier].true_pos[0], self.entities[identifier].true_pos[1] + 50, 30, 10), 0)
 
-        self.groups[identifier] = pg.sprite.Group(self.entities[identifier], healthbar)
+        self.groups[identifier] = pg.sprite.Group(self.entities[identifier])
 
     def createbullet(self, position, angle):  # method has not been tested yet
         self.totalentities += 1
@@ -100,6 +99,11 @@ class Level(object):
         """
 
         dead = list()
+
+        if len(self.entities) == 1:
+            if "player" in self.entities:
+                self.level += 1
+                self.makewave()
 
         for entity in self.entities:  # for loop that updates all instantiated entities
             self.entities[entity].update(keys, self.rect, dt, self.entities)

@@ -27,7 +27,7 @@ class Player(pg.sprite.Sprite):
         self.angular_speed = 30.0  # set rotation speed of player
         self.thrust_strength = 0
         self.max_health = 100
-        self.health = 80  # self.max_health
+        self.health = 100  # self.max_health
         self.heal_rate = 3
         self.max_energy = 100
         self.energy = self.max_energy
@@ -336,7 +336,7 @@ class Bullet(pg.sprite.Sprite):
         self.image = pg.transform.rotozoom(self.original, -self.angle, 1)  # Rotate image to right direction
         self.rect = self.image.get_rect(center=pos)  # get rectangle for player
         self.true_pos = [0, 0]  # list(self.rect.center)  # assign the center of the rectangle to the true position
-        self.thrust_strength = 8000
+        self.thrust_strength = 25000
         self.status = "agressive"
         self.colissionsize = 3  # detection radius for colissions
         self.health = 15
@@ -346,7 +346,6 @@ class Bullet(pg.sprite.Sprite):
         """
         Updates the players position based on currently held keys.
         """
-
         if self.health <= 0:
             self.kill()
 
