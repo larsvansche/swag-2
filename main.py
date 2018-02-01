@@ -92,7 +92,7 @@ class App(object):
         """
         self.screen.fill(prepare.BACKGROUND_COLOR)
         self.health_bar()
-        self.enemy_health()
+        # self.enemy_health()
         self.energy_bar()
         self.level.draw(self.screen)
         pg.display.update()

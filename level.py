@@ -178,3 +178,4 @@ def clear_callback(surface, rect):
     surface.fill((0, 0, 0, 0), rect)
     surface.blit(BIG_STARS, rect, rect)
 
+
