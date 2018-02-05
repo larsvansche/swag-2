@@ -16,16 +16,27 @@ def receive():
         except OSError:  # Possibly client has left the chat.
             break
 
+
 def send(msg):  # event is passed by binders.
     """Handles sending of messages."""
-    msg += "xxx"
-    msg = msg.encode("utf8")
-    client_socket.send(msg)
-    print(msg)
+    # msg = my_msg.get()
+##    my_msg.set("")  # Clears input field.
+    client_socket.send(bytes(msg, "utf8"))
+##    print(msg)
+    time.sleep(0.2)
+
+def on_closing(event=None):
+    """This function is to be called when the window is closed."""
+    my_msg.set("{quit}")
+    send()
 
 #----Now comes the sockets part----
-HOST = '192.168.0.101'
-PORT = 12346
+HOST = '145.89.86.57'
+PORT = '12345'
+if not PORT:
+    PORT = 12345
+else:
+    PORT = int(PORT)
 
 BUFSIZ = 1024
 ADDR = (HOST, PORT)
@@ -35,41 +46,3 @@ client_socket.connect(ADDR)
 
 receive_thread = Thread(target=receive)
 receive_thread.start()
-
-send("en")
-
-
-##import socket, time, threading, os
-##
-##
-##def timeout():
-##    global inTime
-##    time.sleep(5)
-##    inTime = False
-##
-##
-##try:
-##    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-##    host = '192.168.0.101'
-##    port = 12346
-##    sock.connect((host, port))
-##    sock.send(b'A')
-##    print('Connection is stable')
-##except:
-##    print('Connection is unstable.')
-##    print('Please check the server.')
-##    os._exit(0)
-##
-##while True:
-##    time.sleep(1)
-##    sock.send('hallo')
-##    rMessage = sock.recv(2).decode()
-##    print(rMessage)
-##
-##    print('Connection is unstable')
-##
-##
-##
-##
-##sock.close()
-##
